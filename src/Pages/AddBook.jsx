@@ -2,14 +2,22 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 
 function AddBook() {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async(data) => {
-   axios.post('http://localhost:5000/items/', data)
-   .then((response) => {
-    console.log('Data inserted successfully:', response.data);
+   axios.post(`${import.meta.evn.VITE_API_URL}/items/`, data)
+   .then(() => {
+    Swal.fire({
+        title: "Book  Added?",
+        text: "Book Data is Added this!",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Okay!"
+      })
   })
   .catch((error) => {
     console.error('Error inserting data:', error);
