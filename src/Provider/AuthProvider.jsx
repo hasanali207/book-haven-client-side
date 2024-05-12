@@ -12,6 +12,7 @@ import {
   GithubAuthProvider,
   updateProfile
 } from "firebase/auth";
+import axios from "axios";
 
 export const AuthContext = createContext({ user: null, loading: true });
 
@@ -59,9 +60,11 @@ const AuthProvider = ({ children }) => {
       });
   };
   
-  const logOut = () => {
+  const logOut = async() => {
     setLoading(true)
+    await axios(`${import.meta.env.VITE_API_URL}/logout`, {withCredentials:true})
     return signOut(auth)
+
       .then(() => {
         setUser(null);
       })

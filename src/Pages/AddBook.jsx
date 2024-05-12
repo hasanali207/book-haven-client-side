@@ -1,14 +1,16 @@
 
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 
 function AddBook() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { control, register, handleSubmit, formState: { errors } } = useForm();
+  const categories = ['Novel', 'Thriller', 'History', 'Drama', 'Sci-Fi'];
+  
 
   const onSubmit = async(data) => {
-   axios.post(`${import.meta.evn.VITE_API_URL}/items/`, data)
+    console.log(data);
+   axios.post(`${import.meta.env.VITE_API_URL}/items`, data)
    .then(() => {
     Swal.fire({
         title: "Book  Added?",
@@ -52,11 +54,26 @@ function AddBook() {
           <input type="text" id="author" {...register("author", { required: true })} />
           {errors.author && <span>This field is required</span>}
         </div>
+      
         <div>
-          <label htmlFor="category">Category</label>
-          <input type="text" id="category" {...register("category", { required: true })} />
-          {errors.category && <span>This field is required</span>}
-        </div>
+      <label htmlFor="category">Category</label>
+      <Controller
+        name="category"
+        control={control}
+        defaultValue=""
+        render={({ field }) => (
+          <select id="category" {...field}>
+            <option value="">Select Category</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        )}
+      />
+    </div>
+
         <div>
           <label htmlFor="description">Short Description</label>
           <textarea id="description" {...register("description", { required: true })} />

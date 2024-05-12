@@ -2,37 +2,40 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import useAuth from '../Hooks/useAuth';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Login = () => {
-    const { signInUser } = useAuth()
+    const { signInUser } = useAuth();
     const { register, handleSubmit, formState: { errors } } = useForm();
-    
-  // navigation systems
-  const navigate = useNavigate();
-  const location = useLocation();
-    const from = location?.state || "/";
 
-    // handle register
-    const onSubmit = data => {
+    // Navigation systems
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location?.state?.pathname || "/";
+
+    
+    // Handle login
+    const onSubmit = async (data) => {
         const { email, password } = data;
 
-
-        signInUser(email, password)
-        .then((result) => {
-            toast.success('Login Successfully')
-            if (result.user) {
-              navigate(from);
-            }
-          })
-          .catch((error) => {
-            toast.error('Email & Password Dont Match')
+        try {
+            const result = await signInUser(email, password);
             
-          })
+            if (result) {
+                const loggedUser = result.email;
+                const res = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, loggedUser, { withCredentials: true });
+                
 
-
+                if (res.data.token) {
+                    navigate(from);
+                    toast.success('Login Successfully');
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Email & Password Don\'t Match');
+        }
     };
-  
-
 
     return (
         <>
@@ -48,20 +51,25 @@ const Login = () => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="text" placeholder="email" className="input input-bordered"
-                                {...register("email", { required: true })}
+                                <input
+                                    type="text"
+                                    placeholder="email"
+                                    className="input input-bordered"
+                                    {...register("email", { required: true })}
                                 />
-                                 {errors.email && <span className='text-red-500'>This field is required</span>}
+                                {errors.email && <span className='text-red-500'>This field is required</span>}
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="text" placeholder="password" className="input input-bordered"
-                                 {...register("password", { required: true })}
+                                <input
+                                    type="password" // Change type from "text" to "password"
+                                    placeholder="password"
+                                    className="input input-bordered"
+                                    {...register("password", { required: true })}
                                 />
                                 {errors.password && <span className='text-red-500'>This field is required</span>}
-                            
                             </div>
                             <div className="form-control mt-6 p-0">
                                 <button className="btn btn-neutral">Login</button>
@@ -70,7 +78,6 @@ const Login = () => {
                                 New here? <Link to="/register" className="label-text-alt link link-hover">Create an account</Link>
                             </label>
                         </form>
-                            
                     </div>
                 </div>
             </div>
