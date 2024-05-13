@@ -2,15 +2,24 @@
 import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import useAuth from '../Hooks/useAuth';
 
 function AddBook() {
-  const { control, register, handleSubmit, formState: { errors } } = useForm();
+
+  const {user} = useAuth()
+  const { control, register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      librian_email: user?.email,
+    },
+  });
   const categories = ['Novel', 'Thriller', 'History', 'Drama', 'Sci-Fi'];
   
 
   const onSubmit = async(data) => {
-    console.log(data);
-   axios.post(`${import.meta.env.VITE_API_URL}/items`, data)
+
+    data.quantity = parseInt(data.quantity);
+    
+   axios.post(`http://localhost:5000/items`, data)
    .then(() => {
     Swal.fire({
         title: "Book  Added?",
@@ -89,6 +98,11 @@ function AddBook() {
         <div>
           
           <p>This section could contain static text about the book.</p>
+        </div>
+        <div>
+          <label htmlFor="librian_email">Email</label>
+          <input type="text" id="image" {...register("librian_email")} disabled  />
+
         </div>
       <div>  <button type="submit">Add</button></div>
       </form>

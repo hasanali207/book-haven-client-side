@@ -5,7 +5,7 @@ const AllBooks = () => {
 const {data:items, isLoading} = useQuery({
     queryKey:['items'],
     queryFn:async ( )=>{
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/items/`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/items`)
         return res.json()
     }
 })
