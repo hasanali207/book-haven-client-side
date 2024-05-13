@@ -1,33 +1,30 @@
-import React from 'react'
-import useAuth from '../Hooks/useAuth'
-import { useQuery } from '@tanstack/react-query'
-import SingleBorrowBook from '../Components/SingleBorrowBook'
+import React, { useEffect, useState } from 'react';
+import useAuth from '../Hooks/useAuth';
+import SingleBorrowBook from '../Components/SingleBorrowBook';
+import axios from 'axios';
 
 export default function BorrowedBooks() {
-
-  const {user} = useAuth()
+  const { user } = useAuth();
+  const [items, setItems] = useState([]);
+  console.log(items)
   console.log(user)
-  const {data:items, isLoading} = useQuery({
-    queryKey:['items'],
-    queryFn:async ( )=>{
-        const res = await fetch(`http://localhost:5000/borrow/book/${user?.email}`)
-        return res.json()
-    }
-})
+  useEffect(() => {
+   fetch(`http://localhost:5000/getbrrowedbook/${user?.email}`)
+   .then (res => res.json())
+   .then (data => setItems(data))
 
+  }, [user?.email]);
 
+  const handleReturn = async (borrowedBookId) => {
+    
+  };
 
-if(isLoading){
-    return <span className="loading loading-bars loading-lg f"></span>
-
-}
   return (
     <>
-    <div className='grid grid-cols-3 gap-6'>
-      {
-        items.map(item => <SingleBorrowBook key={item._id} item={item}></SingleBorrowBook>)
-      }
-    </div>
+     
+      <div className='grid grid-cols-3 gap-6'>
+        { items.map(item => <SingleBorrowBook key={item._id} handleReturn={handleReturn} item={item} />)}
+      </div>
     </>
-  )
+  );
 }
