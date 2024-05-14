@@ -9,7 +9,7 @@ export default function BorrowedBooks() {
   
   const [items, setItems] = useState([]);
 
-  
+
 
   useEffect(() => {
     fetch(`http://localhost:5000/getbrrowedbook/${user?.email}`)
@@ -63,11 +63,13 @@ export default function BorrowedBooks() {
             <figure className="px-10 pt-10">
               <img src={item.image} alt="Shoes" className="rounded-xl" />
             </figure>
-            <div className="card-body items-center text-center">
+            <div className="card-body">
               <h2 className="card-title">{item.name}</h2>
               <p>{item.category}</p>
-              <p>{item.quantity}</p>
-              <p>{item.return_date}</p>
+              <div>
+              <p> Boorowed Date: {new Date(item.borrowedDate).toLocaleDateString()}</p>
+              <p> Return Date: {new Date(item.return_date).toLocaleDateString()}</p>
+               </div>
               <div className="card-actions">
                 <button
                   onClick={() => handleReturn(item._id, item.setId) }

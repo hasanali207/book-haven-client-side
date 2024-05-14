@@ -12,6 +12,7 @@ const DetailsBook = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [userEmail, setUserEmail] = useState('');
 
+  console.log(user)
   useEffect(() => {
     if (user) {
       setUserEmail(user.email);
@@ -26,12 +27,11 @@ const DetailsBook = () => {
     
       const response = await fetch(`http://localhost:5000/getbrrowedbook/${userEmail}`);
       const borrowedBooksData = await response.json();
-  
-      // Check if the current item is already borrowed
+       
       const alreadyBorrowed = borrowedBooksData.find(item => item.setId === items._id);
   
       if (alreadyBorrowed) {
-        // Display a message indicating that the book is already borrowed
+        
         toast.error('You have already borrowed this book!');
       } else {
        
@@ -48,6 +48,7 @@ const DetailsBook = () => {
     const { _id, author, category, quantity, image, name, rating } = items;
     const updatedQuantity = quantity - 1;
     const user_email = user?.email;
+    const user_name = user?.displayName
     const return_date = startDate;
     console.log(_id);
     const bookData = {
@@ -60,6 +61,7 @@ const DetailsBook = () => {
       name,
       rating,
       user_email,
+      user_name
     };
 
     console.log("Book Data:", bookData);
@@ -78,13 +80,14 @@ const DetailsBook = () => {
   const handleBorrowedBook = () => {
     const { _id, author, category, quantity, image, name, rating } = items;
     const user_email = user?.email;
+    const user_name = user?.displayName
     const return_date = startDate;
     const updatedQuantity = quantity - 1;
     console.log(_id);
-   
+    const borrowedDate = new Date();
     const bookData = {
       setId: _id,
-      author,
+      author: 
       category,
       quantity: updatedQuantity,
       return_date,
@@ -92,6 +95,9 @@ const DetailsBook = () => {
       name,
       rating,
       user_email,
+      user_name,
+      borrowedDate
+
     };
     // Add to borrowed books
     fetch(`http://localhost:5000/borrowed`, {
