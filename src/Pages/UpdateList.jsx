@@ -111,14 +111,10 @@ export default function UpdateList() {
         </div>
         <div>
           
-          <p>This section could contain static text about the book.</p>
+         
         </div>
-        <div>
-          <label htmlFor="librian_email">Email</label>
-          <input type="text" id="image" {...register("librian_email")} disabled  />
-
-        </div>
-      <div>  <button type="submit">Update</button></div>
+        
+      <div className='flex justify-center items-center mt-4'>  <button className="btn btn-outline w-28" type="submit">Update</button></div>
       </form>
     </div>
   )

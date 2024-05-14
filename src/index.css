@@ -28,7 +28,14 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 12px;
-    padding-right: 30px;  
+    padding-right: 30px; 
+     
+  }
+  #description{
+    padding: 10px 6px;
+  }
+  #category{
+    padding: 10px 6px;
   }
   
   input[type="text"],

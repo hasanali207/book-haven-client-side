@@ -10,9 +10,9 @@ const DetailsBook = () => {
   const [items, setItems] = useState(useLoaderData()); // State to manage book details
   const { user } = useAuth();
   const [startDate, setStartDate] = useState(new Date());
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
 
-  console.log(user)
+  console.log(user);
   useEffect(() => {
     if (user) {
       setUserEmail(user.email);
@@ -24,23 +24,22 @@ const DetailsBook = () => {
       // User email not available
       return;
     }
-    
-      const response = await fetch(`http://localhost:5000/getbrrowedbook/${userEmail}`);
-      const borrowedBooksData = await response.json();
-       
-      const alreadyBorrowed = borrowedBooksData.find(item => item.setId === items._id);
-  
-      if (alreadyBorrowed) {
-        
-        toast.error('You have already borrowed this book!');
-      } else {
-       
-        document.getElementById("my_modal_5").showModal();
-      }
-    
+
+    const response = await fetch(
+      `http://localhost:5000/getbrrowedbook/${userEmail}`
+    );
+    const borrowedBooksData = await response.json();
+
+    const alreadyBorrowed = borrowedBooksData.find(
+      (item) => item.setId === items._id
+    );
+
+    if (alreadyBorrowed) {
+      toast.error("You have already borrowed this book!");
+    } else {
+      document.getElementById("my_modal_5").showModal();
+    }
   };
-
-
 
   const handleBorrowed = async () => {
     document.getElementById("my_modal_5").close();
@@ -48,7 +47,7 @@ const DetailsBook = () => {
     const { _id, author, category, quantity, image, name, rating } = items;
     const updatedQuantity = quantity - 1;
     const user_email = user?.email;
-    const user_name = user?.displayName
+    const user_name = user?.displayName;
     const return_date = startDate;
     console.log(_id);
     const bookData = {
@@ -61,7 +60,7 @@ const DetailsBook = () => {
       name,
       rating,
       user_email,
-      user_name
+      user_name,
     };
 
     console.log("Book Data:", bookData);
@@ -80,15 +79,14 @@ const DetailsBook = () => {
   const handleBorrowedBook = () => {
     const { _id, author, category, quantity, image, name, rating } = items;
     const user_email = user?.email;
-    const user_name = user?.displayName
+    const user_name = user?.displayName;
     const return_date = startDate;
     const updatedQuantity = quantity - 1;
     console.log(_id);
     const borrowedDate = new Date();
     const bookData = {
       setId: _id,
-      author: 
-      category,
+      author: category,
       quantity: updatedQuantity,
       return_date,
       image,
@@ -96,8 +94,7 @@ const DetailsBook = () => {
       rating,
       user_email,
       user_name,
-      borrowedDate
-
+      borrowedDate,
     };
     // Add to borrowed books
     fetch(`http://localhost:5000/borrowed`, {
@@ -111,12 +108,15 @@ const DetailsBook = () => {
 
   return (
     <>
-      <div className="max-w-md mx-auto my-10 bg-white shadow-md rounded-md overflow-hidden">
-        <img
-          className="w-full h-64 object-cover"
-          src={items?.image}
-          alt="Product"
-        />
+      <div className=" flex w-2/3 mx-auto my-10 bg-white shadow-md rounded-md overflow-hidden">
+        <figure>
+          <img
+            className="w-full h-64 object-cover"
+            src={items?.image}
+            alt="Product"
+          />
+        </figure>
+
         <div className="p-6">
           <h2 className="text-xl font-semibold text-gray-800">{items?.name}</h2>
           <p className="text-sm text-gray-600">
@@ -129,46 +129,45 @@ const DetailsBook = () => {
           <p className="text-gray-800 font-semibold mt-2">
             Quantity: {items?.quantity}
           </p>
+
+          <div className="">
+          {/* Your book details rendering */}
+          <button
+            className="btn btn-outline w-1/2 flex justify-center items-center"
+            onClick={handlecheckBorrwedBook}
+            disabled={items.quantity === 0}
+          >
+            Borrowed
+          </button>
         </div>
-        <div className="">
-        {/* Your book details rendering */}
-        <button 
-        className="btn btn-outline w-1/2 flex justify-center items-center"
-          onClick={handlecheckBorrwedBook}
-          disabled={items.quantity === 0}
-        >
-          Borrowed
-        </button>
-      </div>
+
+        </div>
+       
       </div>
 
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Borrowed Book!</h3>
-          <p className="py-4">
-            How Much Time Need This Book
-          </p>
+          <p className="py-4">How Much Time Need This Book</p>
           <div className="modal-action">
             <form onSubmit={(e) => e.preventDefault()}>
-              
-            <div>
-            <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-              />
-
-            </div>
+              <div>
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                />
+              </div>
 
               <div>
-              <button
-                onClick={() => {
-                  handleBorrowed();
-                  handleBorrowedBook();
-                }}
-                className="btn btn-ghost"
-              >
-                Borrowed
-              </button>
+                <button
+                  onClick={() => {
+                    handleBorrowed();
+                    handleBorrowedBook();
+                  }}
+                  className="btn btn-ghost"
+                >
+                  Borrowed
+                </button>
               </div>
             </form>
           </div>

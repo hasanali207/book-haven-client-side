@@ -61,28 +61,24 @@ const AllBooks = () => {
   <thead>
     <tr className="border border-slate-400 ">
       <th className="border border-slate-400  py-2">Index</th>
-      <th className="border border-slate-400  py-2">Item Name</th>
-      <th className="border border-slate-400  py-2">Description</th>
-      <th className="border border-slate-400  py-2">Subcategory</th>
-      <th className="border border-slate-400  py-2">Actions</th>
+      <th className="border border-slate-400  py-2">Image</th>
+      <th className="border border-slate-400  py-2">Name</th>
+      <th className="border border-slate-400  py-2">description</th>
+      <th className="border border-slate-400  py-2">Category</th>
     </tr>
   </thead> 
     <tbody>
     {filteredItems.map((item, idx) => (
       <tr key={idx} className="border">
         <td className="border border-slate-400 py-2 text-center">{idx + 1}</td>
-        <td className="border border-slate-400 py-2 text-center">{item.image}</td>
+        <td className="border py-2 border-slate-400  text-center flex items-center justify-center"><img className='w-28 h-full' src={item.image} alt="" /></td>
         
         <td className="border border-slate-400  py-2 text-center">{item.name}</td>
         <td className="border border-slate-400  py-2 text-center">{item.description}</td>
         <td className="border  border-slate-400 py-2 text-center">{item.category}</td>
         <td className="border border-slate-400  py-2 text-center">
-          <Link to={`/singleitem/${item._id}`}>
-            <button className="bg-slate-300 py-2 px-4 font-medium rounded-2xl my-4">
-              Details
-            </button>
-          </Link>
-          <Link to={`/items/update/${item._id}`}> <button className="btn btn-primary btn-outline">Edit</button></Link>
+        
+          <Link to={`/items/update/${item._id}`}> <button className="btn btn-primary btn-outline">Update</button></Link>
         </td>
       </tr>
     ))}
