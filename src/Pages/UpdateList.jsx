@@ -1,64 +1,78 @@
-
-import axios from 'axios';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import useAuth from "../Hooks/useAuth";
 import Swal from 'sweetalert2';
-import useAuth from '../Hooks/useAuth';
 
-function AddBook() {
-  const {user} = useAuth()
+export default function UpdateList() {
+  const { id } = useParams();
+  const { user } = useAuth();
+  const [item, setItem] = useState({});
+  const { control, register, handleSubmit, formState: { errors }, setValue } = useForm();
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/items/update/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // data.quantity = parseInt(data.quantity);
+        setItem(data);
+        setValue('librian_email', user?.email || '');
+        setValue('image', data.image || '');
+        setValue('name', data.name || '');
+        // setValue('quantity', data.quantity || '');
+        setValue('author', data.author || '');
+        setValue('category', data.category || '');
+        setValue('description', data.description || '');
+        setValue('rating', data.rating || '');
+      });
+  }, [id, user?.email, setValue]);
+
   
-  const { control, register, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      librian_email: user?.email,
-    },
-  });
   const categories = ['Novel', 'Thriller', 'History', 'Drama', 'Sci-Fi'];
-  
 
-  const onSubmit = async(data) => {
+ 
 
-    data.quantity = parseInt(data.quantity);
-    
-   axios.post(`http://localhost:5000/items`, data)
-   .then(() => {
-    Swal.fire({
-        title: "Book  Added?",
-        text: "Book Data is Added this!",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Okay!"
-      })
-  })
-  .catch((error) => {
-    console.error('Error inserting data:', error);
-  });
+  const onSubmit = async (data) => {
+    try {
+      await fetch(`http://localhost:5000/updateItem/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
+      Swal.fire({
+        title: 'Update',
+        text: "You won't be able to Updated this!",
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sure!'
+      });
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
   };
 
   return (
     <div>
         <div className='py-12 flex items-center justify-center'>
-        <h2 className='text-3xl font-bold'>Add Book</h2>
+        <h2 className='text-3xl font-bold'>Update Book</h2>
         </div>
       <form  onSubmit={handleSubmit(onSubmit)}>
         <div className='grid grid-cols-3 gap-3'>
         <div>
           <label htmlFor="image">Image</label>
-          <input type="text" id="image" {...register("image")} />
+          <input type="text" id="image"  {...register("image", { required: true })} />
         </div>
         <div>
           <label htmlFor="name">Name</label>
           <input type="text" id="name" {...register("name", { required: true })} />
           {errors.name && <span>This field is required</span>}
         </div>
-        <div>
-          <label htmlFor="quantity">Quantity</label>
-          <input type="number" id="quantity" {...register("quantity", { required: true, pattern: /^\d+$/ })} />
-          {errors.quantity && errors.quantity.type === "required" && <span>This field is required</span>}
-          {errors.quantity && errors.quantity.type === "pattern" && <span>Quantity must be a numeric value</span>}
-        </div>
-        <div>
+           <div>
           <label htmlFor="author">Author Name</label>
           <input type="text" id="author" {...register("author", { required: true })} />
           {errors.author && <span>This field is required</span>}
@@ -68,9 +82,8 @@ function AddBook() {
       <label htmlFor="category">Category</label>
       <Controller
         name="category"
-        className="p-2"
         control={control}
-        defaultValue="History"
+        defaultValue=""
         render={({ field }) => (
           <select id="category" {...field}>
             <option value="">Select Category</option>
@@ -105,10 +118,8 @@ function AddBook() {
           <input type="text" id="image" {...register("librian_email")} disabled  />
 
         </div>
-      <div>  <button type="submit">Add</button></div>
+      <div>  <button type="submit">Update</button></div>
       </form>
     </div>
-  );
+  )
 }
-
-export default AddBook;

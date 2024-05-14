@@ -10,6 +10,7 @@ import Register from "../Pages/Register";
 import PrivateRoute from "../Private/PrivateRoute";
 import DetailsBook from "../Components/DetailsBook";
 import SingleCatData from "../Components/SingleCatData";
+import UpdateList from "../Pages/UpdateList";
 
 
 const router = createBrowserRouter([
@@ -51,6 +52,11 @@ const router = createBrowserRouter([
         {
         path: "/borrowedbooks",
         element: <PrivateRoute><BorrowedBooks></BorrowedBooks></PrivateRoute>,
+        }, 
+        {
+          path: '/items/update/:id',
+          element: <PrivateRoute><UpdateList></UpdateList></PrivateRoute>,
+                
         }
       ]
     },

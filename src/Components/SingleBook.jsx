@@ -29,6 +29,7 @@ export default function SingleBook({ item }) {
         <Link to={`/singleitem/${_id}`}>
           <button className="btn btn-outline">Details</button>
         </Link>
+        <Link to={`/items/update/${item._id}`}> <button className="btn btn-primary btn-outline">Edit</button></Link>
       </div>
     </>
   );

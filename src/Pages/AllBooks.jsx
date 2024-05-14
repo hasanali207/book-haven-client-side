@@ -82,6 +82,7 @@ const AllBooks = () => {
               Details
             </button>
           </Link>
+          <Link to={`/items/update/${item._id}`}> <button className="btn btn-primary btn-outline">Edit</button></Link>
         </td>
       </tr>
     ))}

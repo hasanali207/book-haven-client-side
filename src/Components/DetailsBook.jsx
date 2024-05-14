@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 
@@ -11,6 +10,37 @@ const DetailsBook = () => {
   const [items, setItems] = useState(useLoaderData()); // State to manage book details
   const { user } = useAuth();
   const [startDate, setStartDate] = useState(new Date());
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setUserEmail(user.email);
+    }
+  }, [user]);
+
+  const handlecheckBorrwedBook = async () => {
+    if (!userEmail) {
+      // User email not available
+      return;
+    }
+    
+      const response = await fetch(`http://localhost:5000/getbrrowedbook/${userEmail}`);
+      const borrowedBooksData = await response.json();
+  
+      // Check if the current item is already borrowed
+      const alreadyBorrowed = borrowedBooksData.find(item => item.setId === items._id);
+  
+      if (alreadyBorrowed) {
+        // Display a message indicating that the book is already borrowed
+        toast.error('You have already borrowed this book!');
+      } else {
+       
+        document.getElementById("my_modal_5").showModal();
+      }
+    
+  };
+
+
 
   const handleBorrowed = async () => {
     document.getElementById("my_modal_5").close();
@@ -94,43 +124,46 @@ const DetailsBook = () => {
             Quantity: {items?.quantity}
           </p>
         </div>
-        {items.quantity > 0 ? (
-          <button
-            onClick={() => document.getElementById("my_modal_5").showModal()}
-          >
-            Borrowed
-          </button>
-        ) : (
-          <button
-            onClick={() => document.getElementById("my_modal_5").showModal()}
-            disabled
-          >
-            Borrowed
-          </button>
-        )}
+        <div className="">
+        {/* Your book details rendering */}
+        <button 
+        className="btn btn-outline w-1/2 flex justify-center items-center"
+          onClick={handlecheckBorrwedBook}
+          disabled={items.quantity === 0}
+        >
+          Borrowed
+        </button>
+      </div>
       </div>
 
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
+          <h3 className="font-bold text-lg">Borrowed Book!</h3>
           <p className="py-4">
-            Press ESC key or click the button below to close
+            How Much Time Need This Book
           </p>
           <div className="modal-action">
             <form onSubmit={(e) => e.preventDefault()}>
-              <DatePicker
+              
+            <div>
+            <DatePicker
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
               />
+
+            </div>
+
+              <div>
               <button
                 onClick={() => {
                   handleBorrowed();
                   handleBorrowedBook();
                 }}
-                className="btn"
+                className="btn btn-ghost"
               >
                 Borrowed
               </button>
+              </div>
             </form>
           </div>
         </div>
