@@ -16,14 +16,15 @@ const DetailsBook = () => {
     document.getElementById("my_modal_5").close();
 
     const { _id, author, category, quantity, image, name, rating } = items;
-    const updatedQuantity = quantity - 1
+    const updatedQuantity = quantity - 1;
     const user_email = user?.email;
     const return_date = startDate;
-
+    console.log(_id);
     const bookData = {
       author,
+      setId: _id,
       category,
-      quantity:updatedQuantity,
+      quantity: updatedQuantity,
       return_date,
       image,
       name,
@@ -41,52 +42,36 @@ const DetailsBook = () => {
       body: JSON.stringify(bookData),
     });
 
-   
-
     setItems({ ...items, quantity: updatedQuantity });
   };
 
-  const handleBorrowedBook = () =>{
+  const handleBorrowedBook = () => {
     const { _id, author, category, quantity, image, name, rating } = items;
     const user_email = user?.email;
     const return_date = startDate;
-    const updatedQuantity = quantity - 1
-    
-    const alreadyBorrowed = items.find(item => item.user_email === user_email && item._id === _id);
-    if (alreadyBorrowed) {
-      // Display a message to the user indicating that they have already borrowed the book
-      Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'You have already borrowed this book!',
-      });
-      return;
-    }
-
-
+    const updatedQuantity = quantity - 1;
+    console.log(_id);
+   
     const bookData = {
-      setId : _id,
+      setId: _id,
       author,
       category,
-      quantity:updatedQuantity,
+      quantity: updatedQuantity,
       return_date,
       image,
       name,
       rating,
       user_email,
     };
-     // Add to borrowed books
-     fetch(`http://localhost:5000/borrowed`, {
+    // Add to borrowed books
+    fetch(`http://localhost:5000/borrowed`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(bookData),
     });
-
-  }
-
-
+  };
 
   return (
     <>
@@ -109,19 +94,20 @@ const DetailsBook = () => {
             Quantity: {items?.quantity}
           </p>
         </div>
-         {
-          items.quantity > 0 ? <button
-          onClick={() => document.getElementById("my_modal_5").showModal()}
-        >
-          Borrowed
-        </button> : <button
-          onClick={() => document.getElementById("my_modal_5").showModal()} disabled
-        >
-          Borrowed
-        </button> 
-         }
-
-       
+        {items.quantity > 0 ? (
+          <button
+            onClick={() => document.getElementById("my_modal_5").showModal()}
+          >
+            Borrowed
+          </button>
+        ) : (
+          <button
+            onClick={() => document.getElementById("my_modal_5").showModal()}
+            disabled
+          >
+            Borrowed
+          </button>
+        )}
       </div>
 
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
@@ -136,12 +122,15 @@ const DetailsBook = () => {
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
               />
-              <button onClick={() => {
-    handleBorrowed();
-    handleBorrowedBook();
-}} className="btn">
-    Borrowed
-</button>
+              <button
+                onClick={() => {
+                  handleBorrowed();
+                  handleBorrowedBook();
+                }}
+                className="btn"
+              >
+                Borrowed
+              </button>
             </form>
           </div>
         </div>

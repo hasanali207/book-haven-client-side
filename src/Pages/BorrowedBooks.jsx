@@ -9,13 +9,15 @@ export default function BorrowedBooks() {
   
   const [items, setItems] = useState([]);
 
+  
+
   useEffect(() => {
     fetch(`http://localhost:5000/getbrrowedbook/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setItems(data));
   }, [user?.email]);
 
-  const handleReturn = (_id) => {
+  const handleReturn = (_id, setId) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to Delete this!",
@@ -35,7 +37,7 @@ export default function BorrowedBooks() {
 
               const remaining = items.filter(item => item._id !== _id)
               setItems(remaining)
-              fetch(`http://localhost:5000/getreturn/${_id}`, {
+              fetch(`http://localhost:5000/getreturn/${setId}`, {
                 method: "PUT",
               });
               Swal.fire({
@@ -68,7 +70,7 @@ export default function BorrowedBooks() {
               <p>{item.return_date}</p>
               <div className="card-actions">
                 <button
-                  onClick={() => handleReturn(item._id) }
+                  onClick={() => handleReturn(item._id, item.setId) }
                   className="btn btn-primary"
                 >
                   Return
