@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import toast from "react-hot-toast";
 
 const DetailsBook = () => {
   const [items, setItems] = useState(useLoaderData()); // State to manage book details
@@ -50,7 +51,21 @@ const DetailsBook = () => {
     const user_email = user?.email;
     const return_date = startDate;
     const updatedQuantity = quantity - 1
+    
+    const alreadyBorrowed = items.find(item => item.user_email === user_email && item._id === _id);
+    if (alreadyBorrowed) {
+      // Display a message to the user indicating that they have already borrowed the book
+      Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'You have already borrowed this book!',
+      });
+      return;
+    }
+
+
     const bookData = {
+      setId : _id,
       author,
       category,
       quantity:updatedQuantity,
@@ -94,11 +109,19 @@ const DetailsBook = () => {
             Quantity: {items?.quantity}
           </p>
         </div>
-        <button
+         {
+          items.quantity > 0 ? <button
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
           Borrowed
-        </button>
+        </button> : <button
+          onClick={() => document.getElementById("my_modal_5").showModal()} disabled
+        >
+          Borrowed
+        </button> 
+         }
+
+       
       </div>
 
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
