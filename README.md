@@ -1,10 +1,10 @@
 # Book Have
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is book have website using react. For Assignment 11
 
-Currently, two official plugins are available:
 
 - live site Link : https://book-haven-six.vercel.app/
 - Using React Mongo Db, Firebase, Express,
 - use package : react icon, sweetaler2, react-toast, etc
+- Assignment_ID: assignment_category_0008
 
