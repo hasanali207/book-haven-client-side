@@ -3,36 +3,44 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useAuth from "../Hooks/useAuth";
 import SocialLogin from "../Components/SocialLogin";
+import axios from "axios";
 
 const Login = () => {
   const { signInUser } = useAuth();
   const [showPass, setShowPass] = useState(false);
   
-  const location = useLocation();
-  const navigate = useNavigate();
-  
-  // Get the state of the previous page
-  const prevState = location.state?.from || "/";
+  const location = useLocation()
+  const navigate = useNavigate()
+  const getState = location?.state || '/'
 
-  const handleLogin = (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const email = form.get("email");
     const password = form.get("password");
 
-    signInUser(email, password)
-      .then((result) => {
-        if (result) {
-          // Redirect the user back to the previous page after login
-          navigate(prevState);
-        }
+    try {
+      const result = await signInUser(email, password);
+      console.log(result)
+      if (result) {
+          const loggedUser = result.email;
+          console.log(loggedUser)
+          const res = await axios.post(`https://server-book-haven.vercel.app/jwt`, loggedUser, { withCredentials: true });
+          navigate(getState);
+          toast.success("Successfully Logged In");
+          console.log(res)
+      } 
+      
+  } catch(err) {
+      toast.error(err.message);
+  }
+  
 
-        toast.success("Successfully Logged In");
-      })
-      .catch(() => {
-        toast.error("Email & Password Don't Match");
-      });
-  };
+
+    
+};
+
 
   return (
     <div className="flex justify-center items-center">

@@ -17,10 +17,9 @@ const SocialLogin = () => {
     const handleSocialLogin = socialProvider =>{
         socialProvider()
         .then((result) => {    
-          if(result){
-            navigate(getState);
-          }
           
+            navigate(getState);
+                    
           toast.success("Successfully Logged In");
           
         })

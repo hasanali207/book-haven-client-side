@@ -12,7 +12,9 @@ const Home = () => {
 
   // Fetch items from the backend API
   useEffect(() => {
-    fetch(`https://server-book-haven.vercel.app/items`, {credentials: "include"})
+    fetch(`https://server-book-haven.vercel.app/items`, {
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data) => {
         setItems(data);
@@ -28,12 +30,11 @@ const Home = () => {
         <Slider></Slider>
       </div>
 
-<div className="">
-    <h1 className="text-4xl font-semibold mt-10">View by Category
-</h1>
-</div>
+      <div className="">
+        <h1 className="text-4xl font-semibold mt-10">View by Category</h1>
+      </div>
       <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-6 py-10">
-        {items.map((item) => (
+        {items.slice(0,6).map((item) => (
           <div key={item._id}>
             <div className="flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70">
               <img src={item.image} alt="img here" />
@@ -52,11 +53,11 @@ const Home = () => {
                   <div className="flex items-center gap-3">
                     <p>Rating:</p>
                     <Rating
-        initialRating={item.rating}
-        readonly={true}
-        emptySymbol={<FaRegStar></FaRegStar>}
-        fullSymbol={<FaStar className='text-yellow-500'></FaStar>}
-      />
+                      initialRating={item.rating}
+                      readonly={true}
+                      emptySymbol={<FaRegStar></FaRegStar>}
+                      fullSymbol={<FaStar className="text-yellow-500"></FaStar>}
+                    />
                   </div>
                 </div>
               </div>

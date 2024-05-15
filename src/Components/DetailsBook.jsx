@@ -4,6 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import { FaStar } from "react-icons/fa";
+import { FaRegStar } from "react-icons/fa";
+import Rating from "react-rating";
 
 const DetailsBook = () => {
   const [items, setItems] = useState(useLoaderData()); // State to manage book details
@@ -19,10 +22,7 @@ const DetailsBook = () => {
   }, [user]);
 
   const handlecheckBorrwedBook = async () => {
-    if(items.librian_email == user?.email){
-      return  toast.error("You Are Librian Can nto Borrowed this book!");
-    }
-
+    
     if (!userEmail) {
       // User email not available
       return;
@@ -68,7 +68,7 @@ const DetailsBook = () => {
 
     console.log("Book Data:", bookData);
 
-    fetch(`https://server-book-haven.vercel.app/borrowedBook/${_id}`, {
+    const response = await fetch(`https://server-book-haven.vercel.app/borrowedBook/${_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +76,12 @@ const DetailsBook = () => {
       body: JSON.stringify(bookData),
     });
 
-    setItems({ ...items, quantity: updatedQuantity });
+    if (response.ok) {
+      setItems({ ...items, quantity: updatedQuantity }); // Update state after successful borrow
+      toast.success("Book borrowed successfully!");
+    } else {
+      toast.error("Failed to borrow book. Please try again.");
+    }
   };
 
   const handleBorrowedBook = () => {
@@ -111,7 +116,7 @@ const DetailsBook = () => {
 
   return (
     <>
-      <div className=" flex w-2/3 mx-auto my-10 bg-white shadow-md rounded-md overflow-hidden">
+      <div className=" flex w-2/3 mx-auto my-10 bg-white  rounded-md overflow-hidden">
         <figure>
           <img
             className="w-full h-64 object-cover"
@@ -121,17 +126,25 @@ const DetailsBook = () => {
         </figure>
 
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-800">{items?.name}</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 ">{items?.name}</h2>
+          <h2 className="text-xl text-gray-800 my-2">{items?.description}</h2>
           <p className="text-sm text-gray-600">
-            Subcategory: {items?.category}
+            Category: {items?.category}
           </p>
-          <p className="text-gray-700 mt-2">{items?.author}</p>
-          <p className="text-gray-800 font-semibold mt-2">
-            Rating: {items?.rating}
+          <p className="text-gray-700 mt-2">Author by: {items?.author}</p>
+         <div className="flex justify-between gap-6 items-center my-3">
+         <p className="text-gray-800 font-semibold mt-2">
+            Rating: <Rating
+        initialRating={items?.rating}
+        readonly={true}
+        emptySymbol={<FaRegStar></FaRegStar>}
+        fullSymbol={<FaStar className='text-yellow-500'></FaStar>}
+      />
           </p>
           <p className="text-gray-800 font-semibold mt-2">
             Quantity: {items?.quantity}
           </p>
+         </div>
 
           <div className="">
             {/* Your book details rendering */}
@@ -146,26 +159,30 @@ const DetailsBook = () => {
         </div>
       </div>
 
-      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
+      <dialog id="my_modal_5" className="modal   modal-bottom sm:modal-middle">
+        <div className="modal-box h-[350px] flex flex-col justify-between">
+          <div className="text-center mt-20">
           <h3 className="font-bold text-lg">Borrowed Book!</h3>
           <p className="py-4">How Much Time Need This Book</p>
-          <div className="modal-action">
-            <form onSubmit={(e) => e.preventDefault()}>
-              <div>
+          </div>
+          <div className="modal-action ">
+            <form className="flex gap-6 items-center" onSubmit={(e) => e.preventDefault()}>
+            <h1 className="text-lg font-medium"> Return Date: </h1>
+              <div className="">
+                
                 <DatePicker
                   selected={startDate}
                   onChange={(date) => setStartDate(date)}
                 />
               </div>
 
-              <div>
+              <div> 
                 <button
                   onClick={() => {
                     handleBorrowed();
                     handleBorrowedBook();
                   }}
-                  className="btn btn-ghost"
+                  className="btn bg-slate-300 font-bold"
                 >
                   Borrowed
                 </button>

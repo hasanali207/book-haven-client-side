@@ -20,12 +20,12 @@ export default function BorrowedBooks() {
   const handleReturn = (_id, setId) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to Delete this!",
+      text: "You won't be able to Return this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, Returned it!",
     }).then((result) => {
       if (result.isConfirmed) {
         fetch(`https://server-book-haven.vercel.app/return/${_id}`, {
@@ -41,7 +41,7 @@ export default function BorrowedBooks() {
                 method: "PUT",
               });
               Swal.fire({
-                title: "Deleted!",
+                title: "Returned!",
                 text: "Your Item has been deleted.",
                 icon: "success",
               });
@@ -59,21 +59,21 @@ export default function BorrowedBooks() {
     <>
       <div className="grid grid-cols-3 gap-6">
         {items.map((item) => (
-          <div className="card w-96 bg-base-100 shadow-xl">
-            <figure className="px-10 pt-10">
-              <img src={item.image} alt="Shoes" className="rounded-xl" />
+          <div className="card w-96 bg-base-100 border mt-6">
+            <figure >
+              <img className="border-4 mt-3 border-slate-200" src={item.image} alt="Shoes"  />
             </figure>
             <div className="card-body">
               <h2 className="card-title">{item.name}</h2>
               <p>{item.category}</p>
               <div>
-              <p> Boorowed Date: {new Date(item.borrowedDate).toLocaleDateString()}</p>
+              <p className=""> Boorowed Date: {new Date(item.borrowedDate).toLocaleDateString()}</p>
               <p> Return Date: {new Date(item.return_date).toLocaleDateString()}</p>
                </div>
-              <div className="card-actions">
+              <div className="card-actions mt-2">
                 <button
                   onClick={() => handleReturn(item._id, item.setId) }
-                  className="btn btn-primary"
+                  className="btn bg-slate-200 w-40 "
                 >
                   Return
                 </button>

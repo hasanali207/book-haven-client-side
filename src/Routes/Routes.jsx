@@ -40,12 +40,12 @@ const router = createBrowserRouter([
         element: <PrivateRoute><AddBook></AddBook></PrivateRoute>,
         },
         {
-          path:'singleitem/:id',
+          path:'/singleitem/:id',
           element: <DetailsBook></DetailsBook>,
           loader:({params}) => fetch(`https://server-book-haven.vercel.app/items/${params.id}`)
         },
         {
-          path: "data/:category",
+          path: "/data/:category",
           element: <SingleCatData></SingleCatData>,
           loader: ({params}) => fetch(`https://server-book-haven.vercel.app/data/${params.subcategory_name}`)
           },
