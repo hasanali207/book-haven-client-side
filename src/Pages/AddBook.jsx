@@ -6,10 +6,11 @@ import useAuth from '../Hooks/useAuth';
 
 function AddBook() {
   const {user} = useAuth()
-  
+  console.log(user)
   const { control, register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       librian_email: user?.email,
+      libraian_name: user?.displayName
     },
   });
   const categories = ['Novel', 'Thriller', 'History', 'Drama', 'Sci-Fi'];
@@ -95,17 +96,24 @@ function AddBook() {
           {errors.rating && errors.rating.type === "required" && <span>This field is required</span>}
           <p>{errors.rating && (errors.rating.type === "min" || errors.rating.type === "max") && <span>Rating must be between 1 and 5</span>}</p>
         </div>
-        </div>
-        <div>
-          
-          <p>This section could contain static text about the book.</p>
-        </div>
+
         <div>
           <label htmlFor="librian_email">Email</label>
           <input type="text" id="image" {...register("librian_email")} disabled  />
 
         </div>
-      <div>  <button type="submit">Add</button></div>
+        <div>
+          <label htmlFor="librian_email">libraian_name</label>
+          <input type="text" id="image" {...register("libraian_name")} disabled  />
+
+        </div>
+        </div>
+        <div>
+          
+          <p>This section could contain static text about the book.</p>
+        </div>
+        
+      <div>  <button className='btn btn-outline w-40 mt-4' type="submit">Add</button></div>
       </form>
     </div>
   );

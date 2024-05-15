@@ -19,6 +19,10 @@ const DetailsBook = () => {
   }, [user]);
 
   const handlecheckBorrwedBook = async () => {
+    if(items.librian_email == user?.email){
+      return  toast.error("You Are Librian Can nto Borrowed this book!");
+    }
+
     if (!userEmail) {
       // User email not available
       return;
@@ -130,18 +134,16 @@ const DetailsBook = () => {
           </p>
 
           <div className="">
-          {/* Your book details rendering */}
-          <button
-            className="btn btn-outline w-1/2 flex justify-center items-center"
-            onClick={handlecheckBorrwedBook}
-            disabled={items.quantity === 0}
-          >
-            Borrowed
-          </button>
+            {/* Your book details rendering */}
+            <button
+              className="btn btn-outline w-1/2 flex justify-center items-center"
+              onClick={handlecheckBorrwedBook}
+              disabled={items.quantity === 0}
+            >
+              Borrowed
+            </button>
+          </div>
         </div>
-
-        </div>
-       
       </div>
 
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">

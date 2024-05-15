@@ -45,7 +45,7 @@ export default function SingleBook({ item }) {
         </div>
        <div className="flex gap-4">
       
-        <Link to={`/items/update/${item._id}`}> <button className="btn btn-primary btn-outline">Update</button></Link>
+        <Link to={`/items/update/${item._id}`}> <button className="btn m-2 btn-primary btn-outline">Update</button></Link>
        </div>
       </div>
     </>

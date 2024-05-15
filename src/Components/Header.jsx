@@ -2,7 +2,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
 import { useEffect, useState } from 'react';
-
+import logo from '../assets/logo.png'
 const Header = () => {
   const [theme, setTheme] = useState(() => {
     // Initialize theme from local storage or default to 'light'
@@ -29,10 +29,11 @@ const Header = () => {
   const handleLogout = () => {
     logOut()
   }
+  const active = true
   const NavList = (
     <>
       <li className="bg-white">
-        <NavLink to="/" className="text-lg" href="">
+        <NavLink className="text-lg"   to="/"  href="">
           Home
         </NavLink>
       </li>
@@ -86,7 +87,7 @@ const Header = () => {
           </ul>
         </div>
         <Link to="/" className="text-2xl text-slate-600 font-semibold">
-          Book <span className="text-slate-500">Haven</span>{" "}
+          <img className='w-16' src={logo} alt="" />
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
