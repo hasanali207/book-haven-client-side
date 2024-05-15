@@ -1,88 +1,100 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import useAuth from '../Hooks/useAuth';
-import toast from 'react-hot-toast';
-import axios from 'axios';
+import { useContext, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import useAuth from "../Hooks/useAuth";
+import SocialLogin from "../Components/SocialLogin";
 
 const Login = () => {
-    const { signInUser } = useAuth();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+  const { signInUser } = useAuth();
+  const [showPass, setShowPass] = useState(false);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Get the state of the previous page
+  const prevState = location.state?.from || "/";
 
-    // Navigation systems
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location?.state?.pathname || "/";
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const email = form.get("email");
+    const password = form.get("password");
 
-    
-    // Handle login
-    const onSubmit = async (data) => {
-        const { email, password } = data;
-
-        try {
-            const result = await signInUser(email, password);
-            
-            if (result) {
-                const loggedUser = result.email;
-                const res = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, loggedUser, { withCredentials: true });
-                
-
-                if (res.data.token) {
-                    navigate(from);
-                    toast.success('Login Successfully');
-                }
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error('Email & Password Don\'t Match');
+    signInUser(email, password)
+      .then((result) => {
+        if (result) {
+          // Redirect the user back to the previous page after login
+          navigate(prevState);
         }
-    };
 
-    return (
-        <>
-            <div className="hero min-h-screen bg-base-200">
-                <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center lg:text-left">
-                        <h1 className="text-5xl font-bold">Login now!</h1>
-                        <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                    </div>
-                    <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                        <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Email</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="email"
-                                    className="input input-bordered"
-                                    {...register("email", { required: true })}
-                                />
-                                {errors.email && <span className='text-red-500'>This field is required</span>}
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Password</span>
-                                </label>
-                                <input
-                                    type="password" // Change type from "text" to "password"
-                                    placeholder="password"
-                                    className="input input-bordered"
-                                    {...register("password", { required: true })}
-                                />
-                                {errors.password && <span className='text-red-500'>This field is required</span>}
-                            </div>
-                            <div className="form-control mt-6 p-0">
-                                <button className="btn btn-neutral">Login</button>
-                            </div>
-                            <label className="label">
-                                New here? <Link to="/register" className="label-text-alt link link-hover">Create an account</Link>
-                            </label>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+        toast.success("Successfully Logged In");
+      })
+      .catch(() => {
+        toast.error("Email & Password Don't Match");
+      });
+  };
+
+  return (
+    <div className="flex justify-center items-center">
+      <div className="card shadow-2xl my-10 bg-slate-100 w-full md:w-1/2 lg:w-1/3">
+        <h1 className="text-center text-2xl text-black font-semibold mt-6">
+           Login
+        </h1>
+
+        <form onSubmit={handleLogin} className="card-body p-6">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <input
+              type="email"
+              placeholder="email"
+              name="email"
+              className="input input-bordered"
+              required
+            />
+          </div>
+          <div className="form-control relative">
+            <label className="label">
+              <span className="label-text">Password</span>
+            </label>
+            <input
+              type={showPass ? "text" : "password"}
+              placeholder="password"
+              className="input input-bordered"
+              name="password"
+              required
+            />
+            <span
+              onClick={() => setShowPass(!showPass)}
+              className="absolute bottom-4 right-2 cursor-pointer"
+            >
+              {/* {showPass ? <FaEye /> : <FaEyeSlash />} */}
+            </span>
+          </div>
+          <div className="form-control">
+            <button
+              type="submit"
+              className="group flex items-center justify-center p-0.5 text-center font-medium relative focus:z-10 focus:outline-none text-white bg-gradient-to-r from-purple-500 to-pink-500 enabled:hover:bg-gradient-to-l focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg focus:ring-2"
+            >
+              <span className="flex items-center transition-all duration-200 rounded-md text-sm px-4 py-2">
+                Sign In
+              </span>
+            </button>
+          </div>
+        </form>
+        <div className="px-6">
+          <SocialLogin />
+          <p className="my-4">
+            Create An Account?{" "}
+            <NavLink className="text-black" to="/Register">
+              Register
+            </NavLink>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Login;

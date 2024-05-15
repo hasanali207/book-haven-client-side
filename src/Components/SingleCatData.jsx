@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 export default function SingleCatData() {
     const {category} = useParams()
@@ -9,7 +8,7 @@ export default function SingleCatData() {
     React.useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/data/${category}`);
+                const response = await fetch(`https://server-book-haven.vercel.app/data/${category}`);
                 const data = await response.json();
                 setItems(data);
             } catch (error) {

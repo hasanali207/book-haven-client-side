@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import NumericalRating from "../Components/NumericalRating";
-
+import Rating from "react-rating";
+import { FaStar } from "react-icons/fa";
+import { FaRegStar } from "react-icons/fa";
 export default function SingleBook({ item }) {
   const { author, category, _id, image, name, quantity, rating } = item;
   return (
@@ -33,7 +34,12 @@ export default function SingleBook({ item }) {
           </div>
           <div className="flex items-center gap-3">
           <p>Rating:</p>
-          <NumericalRating value={rating} />
+          <Rating
+        initialRating={rating}
+        readonly={true}
+        emptySymbol={<FaRegStar></FaRegStar>}
+        fullSymbol={<FaStar className='text-yellow-500'></FaStar>}
+      />
           </div>
          </div>
         </div>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import useAuth from "../Hooks/useAuth";
 import Swal from 'sweetalert2';
+import useAuth from "../Hooks/useAuth";
 
 export default function UpdateList() {
   const { id } = useParams();
@@ -11,7 +11,7 @@ export default function UpdateList() {
   const { control, register, handleSubmit, formState: { errors }, setValue } = useForm();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/items/update/${id}`)
+    fetch(`https://server-book-haven.vercel.app/items/update/${id}`)
       .then((res) => res.json())
       .then((data) => {
         // data.quantity = parseInt(data.quantity);
@@ -34,7 +34,7 @@ export default function UpdateList() {
 
   const onSubmit = async (data) => {
     try {
-      await fetch(`http://localhost:5000/updateItem/${id}`, {
+      await fetch(`https://server-book-haven.vercel.app/updateItem/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

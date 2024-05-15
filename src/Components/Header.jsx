@@ -59,24 +59,41 @@ const Header = () => {
 
   return (
     <>
-      <div className="navbar bg-base-100">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-            </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-              {NavList}
-            </ul>
+      <div className="navbar px-4 w-full lg:px-8  shadow-sm flex justify-between  items-center border-b-2 ">
+      <div className="">
+        <div className="dropdown z-50 ">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
           </div>
-          <a className="btn btn-ghost text-xl">Book Haven</a>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
             {NavList}
           </ul>
         </div>
+        <Link to="/" className="text-2xl text-slate-600 font-semibold">
+          Book <span className="text-slate-500">Haven</span>{" "}
+        </Link>
+      </div>
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">{NavList}</ul>
+      </div>
 
+      <div>
         <label className="swap swap-rotate">
           {/* this hidden checkbox controls the state */}
           <input
@@ -104,35 +121,58 @@ const Header = () => {
           </svg>
         </label>
 
+        <div className="dropdown dropdown-hover">
+          <div
+            title={user?.displayName}
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar relative"
+          >
+            <div className="w-10 rounded-full">
+              {user && (
+                <img tabIndex={0} alt="User" src={user?.photoURL} />
+              ) }
+            </div>
+          </div>
 
-        <div className="navbar-end">
-          {
-            !user && (
-              <>
-                <Link to="/login">
-                  <button>Login</button>
-                </Link>
-                <span className="hidden lg:inline-block mx-2"> / </span>
-                <Link to="/register">
-                  <button>Sign up</button>
-                </Link></>
-            )
-          }
-
-          {
-            user && (
-              <>
-                <img className='w-12 rounded-full h-12 ' src={user?.photoURL} alt="None" />
+          {user && (
+            <ul
+              tabIndex={0}
+              className="dropdown-content  z-[10] menu p-2 shadow bg-base-100 rounded-box "
+            >
+              <li>
+                <a>{user?.displayName}</a>
+              </li>
+              <li>
                 <button onClick={handleLogout}>Logout</button>
-              </>
-            )
-          }
+              </li>
+              <li>
+                
+              </li>
+            </ul>
+          )}
         </div>
 
+        <div className="ml-3 flex flex-col lg:flex-row">
+          {/* <Link onClick={handleSignOut}>
+            <button>Logout</button>
+          </Link> */}
 
-
-
+         {
+          !user && (
+          <>
+            <Link to="/login">
+            <button>Login</button>
+          </Link>
+          <span className="hidden lg:inline-block mx-2"> / </span>
+          <Link to="/register">
+            <button>Sign up</button>
+          </Link></>
+          )
+         }
+        </div>
       </div>
+    </div>
     </>
 
   )

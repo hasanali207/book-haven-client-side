@@ -62,7 +62,7 @@ const Footer = () => {
                  <Link><GrInstagram></GrInstagram></Link>
                 </div>
                 <p className="text-base text-body-color dark:text-dark-6">
-                  &copy; 2025 TailGrids
+                  &copy; 2025 Book Have
                 </p>
               </div>
             </div>

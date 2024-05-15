@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Slider from "../Components/Slider";
+import { FaRegStar, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Slider from "../Components/Slider";
 
-import pageOver from "../assets/pageover.jpg";
-import pageOver2 from "../assets/1001.jpg";
+import Rating from "react-rating";
 import HomeBestBook from "../Components/HomeBestBook";
-import NumericalRating from "../Components/NumericalRating";
+import pageOver2 from "../assets/1001.jpg";
+import pageOver from "../assets/pageover.jpg";
 const Home = () => {
   const [items, setItems] = useState([]);
 
   // Fetch items from the backend API
   useEffect(() => {
-    fetch(`http://localhost:5000/items`)
+    fetch(`https://server-book-haven.vercel.app/items`, {credentials: "include"})
       .then((res) => res.json())
       .then((data) => {
         setItems(data);
@@ -50,7 +51,12 @@ const Home = () => {
 
                   <div className="flex items-center gap-3">
                     <p>Rating:</p>
-                    <NumericalRating value={item.rating} />
+                    <Rating
+        initialRating={item.rating}
+        readonly={true}
+        emptySymbol={<FaRegStar></FaRegStar>}
+        fullSymbol={<FaStar className='text-yellow-500'></FaStar>}
+      />
                   </div>
                 </div>
               </div>

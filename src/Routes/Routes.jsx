@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
-import ErrorPage from "../Pages/ErrorPage";
 import App from "../App";
-import Home from "../Pages/Home";
-import Login from "../Pages/Login";
-import AddBook from "../Pages/AddBook";
-import BorrowedBooks from "../Pages/BorrowedBooks";
-import AllBooks from "../Pages/AllBooks";
-import Register from "../Pages/Register";
-import PrivateRoute from "../Private/PrivateRoute";
 import DetailsBook from "../Components/DetailsBook";
 import SingleCatData from "../Components/SingleCatData";
+import AddBook from "../Pages/AddBook";
+import AllBooks from "../Pages/AllBooks";
+import BorrowedBooks from "../Pages/BorrowedBooks";
+import ErrorPage from "../Pages/ErrorPage";
+import Home from "../Pages/Home";
+import Login from "../Pages/Login";
+import Register from "../Pages/Register";
 import UpdateList from "../Pages/UpdateList";
+import PrivateRoute from "../Private/PrivateRoute";
 
 
 const router = createBrowserRouter([
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         },
         {
         path: "/allbooks",
-        element: <AllBooks></AllBooks>
+        element: <PrivateRoute><AllBooks></AllBooks></PrivateRoute>
         },
         {
         path: "/addbook",
@@ -42,13 +42,14 @@ const router = createBrowserRouter([
         {
           path:'singleitem/:id',
           element: <DetailsBook></DetailsBook>,
-          loader:({params}) => fetch(`http://localhost:5000/items/${params.id}`)
+          loader:({params}) => fetch(`https://server-book-haven.vercel.app/items/${params.id}`)
         },
         {
           path: "data/:category",
           element: <SingleCatData></SingleCatData>,
-          loader: ({params}) => fetch(`${import.meta.env.VITE_API_URL}/data/${params.subcategory_name}`)
+          loader: ({params}) => fetch(`https://server-book-haven.vercel.app/data/${params.subcategory_name}`)
           },
+
         {
         path: "/borrowedbooks",
         element: <PrivateRoute><BorrowedBooks></BorrowedBooks></PrivateRoute>,

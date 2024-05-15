@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
-import useAuth from "../Hooks/useAuth";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
+import { useLoaderData } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
 
 const DetailsBook = () => {
   const [items, setItems] = useState(useLoaderData()); // State to manage book details
@@ -26,7 +25,7 @@ const DetailsBook = () => {
     }
 
     const response = await fetch(
-      `http://localhost:5000/getbrrowedbook/${userEmail}`
+      `https://server-book-haven.vercel.app/getbrrowedbook/${userEmail}`
     );
     const borrowedBooksData = await response.json();
 
@@ -65,7 +64,7 @@ const DetailsBook = () => {
 
     console.log("Book Data:", bookData);
 
-    fetch(`http://localhost:5000/borrowedBook/${_id}`, {
+    fetch(`https://server-book-haven.vercel.app/borrowedBook/${_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +96,7 @@ const DetailsBook = () => {
       borrowedDate,
     };
     // Add to borrowed books
-    fetch(`http://localhost:5000/borrowed`, {
+    fetch(`https://server-book-haven.vercel.app/borrowed`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

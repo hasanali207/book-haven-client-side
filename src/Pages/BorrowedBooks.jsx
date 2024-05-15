@@ -12,7 +12,7 @@ export default function BorrowedBooks() {
 
 
   useEffect(() => {
-    fetch(`http://localhost:5000/getbrrowedbook/${user?.email}`)
+    fetch(`https://server-book-haven.vercel.app/getbrrowedbook/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setItems(data));
   }, [user?.email]);
@@ -28,7 +28,7 @@ export default function BorrowedBooks() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/return/${_id}`, {
+        fetch(`https://server-book-haven.vercel.app/return/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())
@@ -37,7 +37,7 @@ export default function BorrowedBooks() {
 
               const remaining = items.filter(item => item._id !== _id)
               setItems(remaining)
-              fetch(`http://localhost:5000/getreturn/${setId}`, {
+              fetch(`https://server-book-haven.vercel.app/getreturn/${setId}`, {
                 method: "PUT",
               });
               Swal.fire({

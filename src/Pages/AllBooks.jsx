@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import SingleBook from '../Components/SingleBook';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import { IoGrid } from "react-icons/io5";
 import { FaTableList } from "react-icons/fa6";
+import { IoGrid } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import SingleBook from '../Components/SingleBook';
 
 
 const AllBooks = () => {
@@ -13,7 +13,7 @@ const AllBooks = () => {
 
     // Fetch items from the backend API
     useEffect(() => {
-        fetch(`http://localhost:5000/items`)
+        fetch(`https://server-book-haven.vercel.app/items`, {credentials:'include'})
             .then(res => res.json())
             .then(data => {
                 setItems(data);

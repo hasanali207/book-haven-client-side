@@ -2,17 +2,17 @@ import { createContext, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { auth } from "../firebase/firebase.config";
 
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged, 
-  GoogleAuthProvider,
-  signInWithPopup,
+import axios from "axios";
+import {
   GithubAuthProvider,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
   updateProfile
 } from "firebase/auth";
-import axios from "axios";
 
 export const AuthContext = createContext({ user: null, loading: true });
 
@@ -62,7 +62,7 @@ const AuthProvider = ({ children }) => {
   
   const logOut = async() => {
     setLoading(true)
-    await axios(`${import.meta.env.VITE_API_URL}/logout`, {withCredentials:true})
+    await axios(`https://server-book-haven.vercel.app/logout`, {withCredentials:true})
     return signOut(auth)
 
       .then(() => {

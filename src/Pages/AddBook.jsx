@@ -19,7 +19,7 @@ function AddBook() {
 
     data.quantity = parseInt(data.quantity);
     
-   axios.post(`http://localhost:5000/items`, data)
+   axios.post(`https://server-book-haven.vercel.app/items`, data)
    .then(() => {
     Swal.fire({
         title: "Book  Added?",
