@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         },
         {
           path:'/singleitem/:id',
-          element: <DetailsBook></DetailsBook>,
+          element: <PrivateRoute><DetailsBook></DetailsBook></PrivateRoute>,
           loader:({params}) => fetch(`https://server-book-haven.vercel.app/items/${params.id}`)
         },
         {
