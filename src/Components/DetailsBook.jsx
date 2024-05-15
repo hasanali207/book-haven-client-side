@@ -22,7 +22,10 @@ const DetailsBook = () => {
   }, [user]);
 
   const handlecheckBorrwedBook = async () => {
-    
+    if(items.librian_email === user?.email){
+      return  toast.error("You Are Librian Can not Borrow this book!");
+    }
+
     if (!userEmail) {
       // User email not available
       return;
@@ -74,6 +77,7 @@ const DetailsBook = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(bookData),
+
     });
 
     if (response.ok) {
@@ -112,6 +116,8 @@ const DetailsBook = () => {
       },
       body: JSON.stringify(bookData),
     });
+
+    
   };
 
   return (
